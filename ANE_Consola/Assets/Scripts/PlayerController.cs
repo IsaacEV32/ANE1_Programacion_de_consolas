@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     {
         if (isMoving)
         {
-            transform.position += movementDir * playerSpeed * Time.deltaTime;
+            transform.position += movementDir.normalized * playerSpeed * Time.deltaTime;
         }
     }
     public void Movement(InputAction.CallbackContext movementContext)
@@ -25,7 +25,10 @@ public class PlayerController : MonoBehaviour
         if (movementContext.performed)
         {
             Vector2 dir = movementContext.ReadValue<Vector2>();
-            movementDir = new Vector3(dir.x,0,dir.y);
+            Vector3 _movementDir = new Vector3(dir.x, 0, dir.y);
+
+            movementDir = _movementDir.x * transform.right + _movementDir.z * transform.forward;
+
             isMoving = true;
         }
         else if (movementContext.canceled)

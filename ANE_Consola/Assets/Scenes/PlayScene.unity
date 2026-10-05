@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 1149446512}
   - component: {fileID: 1149446511}
   - component: {fileID: 1149446514}
+  - component: {fileID: 1149446515}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -480,6 +481,20 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!114 &1149446515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1149446510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4affa73ed95fe64e829d07c9e2d9cb4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraController
+  cameraSpeed: 30
+  playerTransform: {fileID: 1152250818}
 --- !u!1 &1152250812
 GameObject:
   m_ObjectHideFlags: 0
@@ -573,6 +588,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: a8071d5c-8c63-4eea-882c-e227203aac39
     m_ActionName: GamePad/Jump
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1149446515}
+        m_TargetAssemblyTypeName: CameraController, Assembly-CSharp
+        m_MethodName: MoveCamera
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: a8fad888-8389-40c4-a996-8af6dc696db2
+    m_ActionName: GamePad/CameraMovement
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: GamePad
