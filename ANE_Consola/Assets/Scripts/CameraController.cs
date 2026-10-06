@@ -7,10 +7,16 @@ public class CameraController : MonoBehaviour
     [SerializeField] Transform playerTransform;
     Vector3 movementDir;
     bool ismovingCamera = false;
+    InvokePauseMenu pauseMenu;
+
+    private void Awake()
+    {
+        pauseMenu = InvokePauseMenu.instance;
+    }
 
     private void LateUpdate()
     {
-        if (ismovingCamera)
+        if (ismovingCamera && !pauseMenu.IsGamePaused())
         {
             playerTransform.rotation = 
                 Quaternion.Euler(playerTransform.rotation.eulerAngles + new Vector3(0, movementDir.x * cameraSpeed * Time.deltaTime, 0));
