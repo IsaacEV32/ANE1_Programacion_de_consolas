@@ -91,8 +91,25 @@
                     "action": "PauseMenu",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "91ca07b9-e0ed-4b9e-9c16-c3c3ee70a6c9",
+                    "path": "<Gamepad>/select",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "PauseMenu",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "ControlManager",
+            "id": "6724bec9-2414-4fb6-b7a8-b9ccd5f82bda",
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": []

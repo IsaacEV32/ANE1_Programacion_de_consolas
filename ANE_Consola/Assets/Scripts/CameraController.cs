@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     bool ismovingCamera = false;
     InvokePauseMenu pauseMenu;
 
-    private void Awake()
+    private void Start()
     {
         pauseMenu = InvokePauseMenu.instance;
     }

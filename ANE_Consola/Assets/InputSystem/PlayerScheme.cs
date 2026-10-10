@@ -177,8 +177,25 @@ public partial class @PlayerScheme: IInputActionCollection2, IDisposable
                     ""action"": ""PauseMenu"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""91ca07b9-e0ed-4b9e-9c16-c3c3ee70a6c9"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""PauseMenu"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""ControlManager"",
+            ""id"": ""6724bec9-2414-4fb6-b7a8-b9ccd5f82bda"",
+            ""actions"": [],
+            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
@@ -189,11 +206,14 @@ public partial class @PlayerScheme: IInputActionCollection2, IDisposable
         m_GamePad_Jump = m_GamePad.FindAction("Jump", throwIfNotFound: true);
         m_GamePad_CameraMovement = m_GamePad.FindAction("CameraMovement", throwIfNotFound: true);
         m_GamePad_PauseMenu = m_GamePad.FindAction("PauseMenu", throwIfNotFound: true);
+        // ControlManager
+        m_ControlManager = asset.FindActionMap("ControlManager", throwIfNotFound: true);
     }
 
     ~@PlayerScheme()
     {
         UnityEngine.Debug.Assert(!m_GamePad.enabled, "This will cause a leak and performance issues, PlayerScheme.GamePad.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_ControlManager.enabled, "This will cause a leak and performance issues, PlayerScheme.ControlManager.Disable() has not been called.");
     }
 
     /// <summary>
@@ -394,6 +414,91 @@ public partial class @PlayerScheme: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="GamePadActions" /> instance referencing this action map.
     /// </summary>
     public GamePadActions @GamePad => new GamePadActions(this);
+
+    // ControlManager
+    private readonly InputActionMap m_ControlManager;
+    private List<IControlManagerActions> m_ControlManagerActionsCallbackInterfaces = new List<IControlManagerActions>();
+    /// <summary>
+    /// Provides access to input actions defined in input action map "ControlManager".
+    /// </summary>
+    public struct ControlManagerActions
+    {
+        private @PlayerScheme m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public ControlManagerActions(@PlayerScheme wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_ControlManager; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="ControlManagerActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(ControlManagerActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="ControlManagerActions" />
+        public void AddCallbacks(IControlManagerActions instance)
+        {
+            if (instance == null || m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Add(instance);
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="ControlManagerActions" />
+        private void UnregisterCallbacks(IControlManagerActions instance)
+        {
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="ControlManagerActions.UnregisterCallbacks(IControlManagerActions)" />.
+        /// </summary>
+        /// <seealso cref="ControlManagerActions.UnregisterCallbacks(IControlManagerActions)" />
+        public void RemoveCallbacks(IControlManagerActions instance)
+        {
+            if (m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="ControlManagerActions.AddCallbacks(IControlManagerActions)" />
+        /// <seealso cref="ControlManagerActions.RemoveCallbacks(IControlManagerActions)" />
+        /// <seealso cref="ControlManagerActions.UnregisterCallbacks(IControlManagerActions)" />
+        public void SetCallbacks(IControlManagerActions instance)
+        {
+            foreach (var item in m_Wrapper.m_ControlManagerActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_ControlManagerActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="ControlManagerActions" /> instance referencing this action map.
+    /// </summary>
+    public ControlManagerActions @ControlManager => new ControlManagerActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "GamePad" which allows adding and removing callbacks.
     /// </summary>
@@ -429,5 +534,13 @@ public partial class @PlayerScheme: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnPauseMenu(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "ControlManager" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="ControlManagerActions.AddCallbacks(IControlManagerActions)" />
+    /// <seealso cref="ControlManagerActions.RemoveCallbacks(IControlManagerActions)" />
+    public interface IControlManagerActions
+    {
     }
 }

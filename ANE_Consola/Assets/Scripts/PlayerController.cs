@@ -4,19 +4,24 @@ using UnityEngine.InputSystem;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+
+
     [SerializeField] int playerSpeed;
     [SerializeField] int forceJump;
-    [SerializeField]LayerMask groundLayerMask;
+    [SerializeField] LayerMask groundLayerMask;
     Vector3 movementDir;
     bool isMoving = false;
     Rigidbody rb;
 
     InvokePauseMenu pauseMenu;
+
+    
     private void Start()
     {
         rb = GetComponent<Rigidbody>();
         pauseMenu = InvokePauseMenu.instance;
     }
+    
     private void Update()
     {
         if (isMoving && !pauseMenu.IsGamePaused())
